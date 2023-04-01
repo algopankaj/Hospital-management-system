@@ -51,6 +51,39 @@ public class PatientController {
         }
        return lists;
   }
+    @GetMapping("/getInfoViaVar/{patientId}")
+     public Patient geto(@PathVariable("patientId")Integer patientId){
+        Patient p=patientDb.get(patientId);
+        return p;
+    }
 
+    @GetMapping("/getPatients/{age}/{disease}")
+    public List<Patient> getPatients(@PathVariable("age")Integer age,@PathVariable("disease") String disease){
 
+        List<Patient>list=new ArrayList<>();
+        for(Patient p1:patientDb.values()){
+            if(p1.getAge()>age && p1.getDisease().equals(disease)){
+                list.add(p1);
+            }
+        }
+        return list;
+    }
+
+    @PutMapping("/updatePaitentDetails")
+    public String updatePatientDetails(@RequestBody Patient patient){
+        int key=patient.getPatientId();
+        if(patientDb.containsKey(key)){
+            patientDb.put(key,patient);
+        }
+        return "patient added successfully !";
+    }
+
+    @DeleteMapping("/deletePatient")
+    public String deletePatient(@RequestParam("patientId")Integer patientId){
+        patientDb.remove(patientId);
+        return "Patient has been remove successfully !";
+    }
 }
+
+
+
